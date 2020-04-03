@@ -19,7 +19,7 @@ class SynapticCell(NetConCell):
             eg. (lambda expression) returns sections which name contains 'apic' or their distance > 1000 um from the soma:
           ```
            soma = cell.filter_secs("soma")
-           cell.filter_secs(obj_filter=lambda o: 'apic' in o.name or h.distance(soma(0.5), o(0.5)) > 1000)
+           cell.filter_secs(obj_filter=lambda o: 'apic' in o.name or h.distance(soma.hoc(0.5), o.hoc(0.5)) > 1000)
           ```
 
         * Single object field filter based on callable function passed to the obj_filter param.
@@ -65,7 +65,7 @@ class SynapticCell(NetConCell):
         pp = self.add_point_process(mod_name=mod_name, seg=seg, tag=tag, **synaptic_params)
         nn = self.add_netcon(source=source, netcon_weight=netcon_weight, point_process=pp, delay=delay, threshold=threshold)
 
-        syn_name = str(self._syn_num[mod_name])
+        syn_name = "%s[%s]" % (pp.name, self._syn_num[mod_name])
         syn = Synapse(source, point_process=pp, netcon=nn, name=syn_name, tag=tag)
         self.syns.append(syn)
         self._syn_num[mod_name] += 1

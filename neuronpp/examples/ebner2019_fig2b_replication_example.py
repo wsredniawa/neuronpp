@@ -1,10 +1,14 @@
+import os
+
 import matplotlib.pylab as plt
 
 from neuronpp.utils.iclamp import IClamp
 from neuronpp.utils.record import Record
-from neuronpp.utils.run_sim import RunSim
+from neuronpp.utils.simulation import Simulation
 from neuronpp.cells.ebner2019_cell import Ebner2019Cell
 from neuronpp.core.cells.netstim_cell import NetStimCell
+
+path = os.path.dirname(os.path.abspath(__file__))
 
 REPS = 5  # Number of pre-and postsynaptic spikes
 DT = 0.025
@@ -21,7 +25,9 @@ delta_t = 10  # LTP
 
 if __name__ == '__main__':
     cell = Ebner2019Cell(name="cell")
-    cell.load_morpho(filepath='../commons/morphologies/asc/cell1.asc')
+    filepath = os.path.join(path, "..",
+                            "commons/morphologies/asc/cell1.asc")
+    cell.load_morpho(filepath=filepath)
     cell.make_default_mechanisms()
 
     soma = cell.filter_secs("soma")
@@ -40,7 +46,7 @@ if __name__ == '__main__':
     rec = Record([s(0.5) for s in cell.filter_secs("apic[1],apic[50]")])
 
     # Run
-    sim = RunSim(init_v=-70, warmup=WARMUP, dt=DT)
+    sim = Simulation(init_v=-70, warmup=WARMUP, dt=DT)
     total_time = REPS * interval + COOL_DOWN
     sim.run(total_time)
 
