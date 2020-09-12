@@ -59,6 +59,7 @@ class Simulation:
         h.dt = self.dt
 
     @property
+    
     def t(self):
         return h.t
 

@@ -10,12 +10,11 @@ class IClamp:
             raise TypeError("Param 'segment' must be a Seg object, eg. soma(0.5).")
 
         self._segment = segment
-        self.iclamps = []
+        self.clamp = h.IClamp(self._segment.hoc)
 
     def stim(self, delay, dur, amp):
         """
         All IClamp stims must be setup before any run.
-
         Each default units can be override by the user eg. stim(delay=20*um, ...)
         :param delay:
             by default in ms
@@ -25,8 +24,6 @@ class IClamp:
             by default in nA
         :return:
         """
-        clamp = h.IClamp(self._segment.hoc)
-        clamp.delay = delay * ms
-        clamp.dur = dur * ms
-        clamp.amp = amp
-        self.iclamps.append(clamp)
+        self.clamp.delay = delay * ms
+        self.clamp.dur = dur * ms
+        self.clamp.amp = amp
